@@ -1,7 +1,11 @@
 from flask import render_template, request, redirect, url_for, session, flash, make_response
 from flask import Blueprint
 import mysql.connector
+<<<<<<< HEAD
 from .validation_functions import validate_first_name, validate_middle_name, validate_last_name, validate_birthday, validate_age, validate_contact_number, validate_email
+=======
+from .validation_functions import validate_first_name, validate_middle_name, validate_last_name, validate_birthday, validate_age, validate_contact_number, validate_email, validate_username, validate_password
+>>>>>>> c0d931b (Initial commit)
 
 
 account_blueprint = Blueprint('account', __name__, template_folder='templates')
@@ -41,10 +45,15 @@ def index():
     response.headers['Cache-Control'] = 'no-store'
     return response
 
+<<<<<<< HEAD
 
 @account_blueprint.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
     
+=======
+@account_blueprint.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+>>>>>>> c0d931b (Initial commit)
     if 'user' not in session:
         flash('Please log in first.', 'warning')
         return redirect(url_for('login.index'))
@@ -62,8 +71,13 @@ def update(id):
         age = request.form['age'].strip()
         contact_number = request.form['contact_number'].strip()
         email = request.form['email'].strip()
+<<<<<<< HEAD
         # username = request.form['username']
         # password = request.form['password']
+=======
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+>>>>>>> c0d931b (Initial commit)
 
         # Validate form fields
         errors['firstname'] = validate_first_name(firstname)
@@ -73,15 +87,40 @@ def update(id):
         errors['age'] = validate_age(age, birthday)
         errors['contact_number'] = validate_contact_number(contact_number)
         errors['email'] = validate_email(email)
+<<<<<<< HEAD
+=======
+        errors['username'] = validate_username(username)
+        errors['password'] = validate_password(password)
+
+        cursor.execute('SELECT * FROM users_info WHERE username = %s AND id != %s', (username, id))
+        existing_username = cursor.fetchone()
+        
+        # Check if the email already exists (excluding the current user)
+        cursor.execute('SELECT * FROM users_info WHERE email = %s AND id != %s', (email, id))
+        existing_email = cursor.fetchone()
+
+        if existing_username:
+            errors['username'] = 'Username already exists. Please choose another one.'
+        if existing_email:
+            errors['email'] = 'Email already exists. Please choose another one.'
+>>>>>>> c0d931b (Initial commit)
 
         # If no errors, proceed with the update
         if not any(errors.values()):
             try:
+<<<<<<< HEAD
                 cursor.execute('''
                     UPDATE users_info 
                     SET firstname=%s, middlename=%s, lastname=%s, birthday=%s, age=%s, contact_number=%s, email=%s
                     WHERE id=%s
                 ''', (firstname, middlename, lastname, birthday, age, contact_number, email, id))
+=======
+                cursor.execute(''' 
+                    UPDATE users_info 
+                    SET firstname=%s, middlename=%s, lastname=%s, birthday=%s, age=%s, contact_number=%s, email=%s, username=%s, password=%s
+                    WHERE id=%s
+                ''', (firstname, middlename, lastname, birthday, age, contact_number, email, username, password, id))
+>>>>>>> c0d931b (Initial commit)
                 conn.commit()
                 return '''
                 <script>
@@ -91,6 +130,10 @@ def update(id):
                 '''.format(url_for('account.index'))
             except mysql.connector.Error as e:
                 return f"Updating data failed! Error: {str(e)}"
+<<<<<<< HEAD
+=======
+        
+>>>>>>> c0d931b (Initial commit)
         # If there are errors, re-render the form with errors
         return render_template('update.html', data=request.form, errors=errors)
     

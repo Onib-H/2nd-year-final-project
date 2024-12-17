@@ -70,6 +70,16 @@ def update(id):
         errors['age'] = validate_age(age, birthday)
         errors['contact_number'] = validate_contact_number(contact_number)
         errors['email'] = validate_email(email)
+<<<<<<< HEAD
+=======
+        
+        # Check if the email already exists (excluding the current user)
+        cursor.execute('SELECT * FROM users_info WHERE email = %s AND id != %s', (email, id))
+        existing_email = cursor.fetchone()
+
+        if existing_email:
+            errors['email'] = 'Email already exists. Please choose another one.'
+>>>>>>> c0d931b (Initial commit)
 
         # If no errors, proceed with the update
         if not any(errors.values()):
