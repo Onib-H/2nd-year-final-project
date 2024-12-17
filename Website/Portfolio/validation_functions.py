@@ -160,13 +160,8 @@ def validate_username(username):
         return "Username cannot contain spaces."
     
     # Length check (e.g., between 5 and 20 characters)
-<<<<<<< HEAD
     if len(username) < 5 or len(username) > 20:
         return "Username must be between 5 and 20 characters."
-=======
-    if len(username) < 2 or len(username) > 20:
-        return "Username must be between 2 and 20 characters."
->>>>>>> c0d931b (Initial commit)
     
     # Character restriction (only alphanumeric and underscores allowed)
     if not username.isalnum() and "_" not in username:
